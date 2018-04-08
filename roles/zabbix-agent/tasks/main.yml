@@ -1,0 +1,35 @@
+- name: rpmfile cp
+  copy:  src=/work/zabbix-agent-3.0.11-1.el7.x86_64.rpm  dest=/tmp/
+
+- name: rpm install
+  yum: name=/tmp/zabbix-agent-3.0.11-1.el7.x86_64.rpm  state=present
+
+- name: rpmfile del
+  file: path=/tmp/zabbix-agent-3.0.11-1.el7.x86_64.rpm  state=absent
+
+- name: Set /etc/zabbix/zabbix_agentd.conf
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=yes
+    regexp='^Server=.*[0-9]$'
+    line='Server={{ zabbix_server_ip }}'
+
+- name: Set /etc/zabbix/zabbix_agentd.conf
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=no
+    regexp='^ServerActive=.*[0-9]$'
+    line='ServerActive={{ zabbix_server_ip }}:10051'
+
+- name: Set /etc/zabbix/zabbix_agentd.conf
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=yes
+    regexp='^Hostname=.*'
+    line='Hostname={{ ansible_hostname }}'
+
+- name: start zabbix-agent and enable
+  service: name=zabbix-agent state=started enabled=yes
