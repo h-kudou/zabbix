@@ -1,7 +1,7 @@
 コンフィグ修正用
 
 Shellにて実行したコマンドの結果も出力する場合は
-5,行目に下記を追記
+5,17行目に下記を追記
 
 - name: debug result var
   debug: var=result
