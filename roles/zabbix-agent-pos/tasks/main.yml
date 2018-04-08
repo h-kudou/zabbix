@@ -1,0 +1,22 @@
+- name: zabbix_agentd config server ip
+  shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^Server='
+  register: result
+
+- name: debug result var
+  debug: var=result
+
+- name: modify zabbix_agentd config
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=no
+    regexp='^Server=.*[0-9]$'
+    line={{ result.stdout }},{{ zabbix_server_pos_ip }}
+
+- name: modify zabbix_agentd config     
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=no
+    regexp='^ServerActive=.*[0-9]$'
+    line={{ result.stdout }},{{ zabbix_server_pos_ip }}:10051
