@@ -6,3 +6,7 @@ db
 
 [zabbix]
 zabbix
+
+[apache]
+web
+zabbix
