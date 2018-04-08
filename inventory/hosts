@@ -1,12 +1,6 @@
 [web]
 web
-
 [db]
 db
-
 [zabbix]
-zabbix
-
-[apache]
-web
 zabbix
