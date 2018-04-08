@@ -1,1 +1,7 @@
 コンフィグ修正用
+
+Shellにて実行したコマンドの結果も出力する場合は
+5,20行目に下記を追記
+
+- name: debug result var
+  debug: var=result
