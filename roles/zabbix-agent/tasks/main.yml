@@ -7,7 +7,7 @@
 - name: rpmfile del
   file: path=/tmp/zabbix-agent-3.0.11-1.el7.x86_64.rpm  state=absent
 
-- name: Set /etc/zabbix/zabbix_agentd.conf
+- name: Set Server
   lineinfile: >
     dest=/etc/zabbix/zabbix_agentd.conf
     state=present
@@ -15,7 +15,7 @@
     regexp='^Server=.*[0-9]$'
     line='Server={{ zabbix_server_ip }}'
 
-- name: Set /etc/zabbix/zabbix_agentd.conf
+- name: Set ServerActive
   lineinfile: >
     dest=/etc/zabbix/zabbix_agentd.conf
     state=present
@@ -23,7 +23,7 @@
     regexp='^ServerActive=.*[0-9]$'
     line='ServerActive={{ zabbix_server_ip }}:10051'
 
-- name: Set /etc/zabbix/zabbix_agentd.conf
+- name: Set Hostname
   lineinfile: >
     dest=/etc/zabbix/zabbix_agentd.conf
     state=present
