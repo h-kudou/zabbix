@@ -1,6 +1,7 @@
 - name: zabbix_agentd config server ip
   shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^Server='
   register: result
+  changed_when: false
 
 - name: modify zabbix_agentd config
   lineinfile: >
