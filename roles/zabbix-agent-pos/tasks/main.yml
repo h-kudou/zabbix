@@ -25,3 +25,5 @@
     regexp='^ServerActive=.*[0-9]$'
     line={{ result.stdout }},{{ zabbix_server_pos_ip }}:10051
     when: result.stdout.count(zabbix_server_pos_ip) < 1
+    notify:
+      - restart zabbix-agent
