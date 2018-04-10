@@ -10,10 +10,12 @@
     backrefs=no
     regexp='^Server=.*[0-9]$'
     line={{ result.stdout }},{{ zabbix_server_pos_ip }}
+    when: result.stdout.count(zabbix_server_pos_ip) < 1
 
 - name: zabbix_agentd config server ip
   shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^ServerActive='
   register: result
+  changed_when: false
 
 - name: modify zabbix_agentd config     
   lineinfile: >
@@ -22,3 +24,4 @@
     backrefs=no
     regexp='^ServerActive=.*[0-9]$'
     line={{ result.stdout }},{{ zabbix_server_pos_ip }}:10051
+    when: result.stdout.count(zabbix_server_pos_ip) < 1
