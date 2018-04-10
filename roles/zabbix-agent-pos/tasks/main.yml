@@ -1,9 +1,9 @@
-- name: zabbix_agentd config server ip
+- name: zabbix_agentd config Server ip
   shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^Server='
   register: result
   changed_when: false
 
-- name: modify zabbix_agentd config
+- name: modify zabbix_agentd config Server ip
   lineinfile: >
     dest=/etc/zabbix/zabbix_agentd.conf
     state=present
@@ -12,12 +12,12 @@
     line={{ result.stdout }},{{ zabbix_server_pos_ip }}
     when: result.stdout.count(zabbix_server_pos_ip) < 1
 
-- name: zabbix_agentd config server ip
+- name: zabbix_agentd config ServerActive ip
   shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^ServerActive='
   register: result
   changed_when: false
 
-- name: modify zabbix_agentd config     
+- name: modify zabbix_agentd config ServerActive ip
   lineinfile: >
     dest=/etc/zabbix/zabbix_agentd.conf
     state=present
