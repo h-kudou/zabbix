@@ -1,4 +1,4 @@
 ---
 zabbix_server_ip: 192.168.100.105
 zabbix_server_pos_ip: 10.0.2.15
-zabbix-agent-version: 3.0.11-1.el7
+zabbix_agent_version: 3.0.11-1.el7
