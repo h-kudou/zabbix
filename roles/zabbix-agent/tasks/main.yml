@@ -1,11 +1,11 @@
 - name: rpmfile cp
-  copy:  src=/work/zabbix-agent-{{ zabbix-agent-version }}.x86_64.rpm  dest=/tmp/
+  copy:  src=/work/zabbix-agent-{{ zabbix_agent_version }}.x86_64.rpm  dest=/tmp/
 
 - name: rpm install
-  yum: name=/tmp/zabbix-agent-{{ zabbix-agent-version }}.x86_64.rpm  state=present
+  yum: name=/tmp/zabbix-agent-{{ zabbix_agent_version }}.x86_64.rpm  state=present
 
 - name: rpmfile del
-  file: path=/tmp/zabbix-agent-{{ zabbix-agent-version }}.x86_64.rpm  state=absent
+  file: path=/tmp/zabbix-agent-{{ zabbix_agent_version }}.x86_64.rpm  state=absent
 
 - name: Set Server ip
   lineinfile: >
