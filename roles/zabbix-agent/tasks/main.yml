@@ -12,7 +12,7 @@
     dest=/etc/zabbix/zabbix_agentd.conf
     state=present
     insertafter='^# EnableRemoteCommands=0$'
-    line='EnableRemortCommands=1'
+    line='EnableRemoteCommands=1'
 
 - name: Set LogRemoteCommands
   lineinfile: >
