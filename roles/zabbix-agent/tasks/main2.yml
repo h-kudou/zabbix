@@ -1,0 +1,20 @@
+- name: rpmfile cp
+  copy:  src=/work/zabbix-agent-{{ zabbix_agent_version }}.x86_64.rpm  dest=/tmp/
+
+- name: rpm install
+  yum: name=/tmp/zabbix-agent-{{ zabbix_agent_version }}.x86_64.rpm  state=present
+
+- name: rpmfile del
+  file: path=/tmp/zabbix-agent-{{ zabbix_agent_version }}.x86_64.rpm  state=absent
+
+- name: modify zabbix_agentd config
+  template:
+    src=Templates/zabbix_agentd.conf
+    dest='/etc/zabbix/zabbix_agentd.conf'
+    owner=root
+    group=root
+    mode=0644
+  with_items: "{{ zabbix_server_ip }}"
+
+- name: start zabbix-agent and enable
+  service: name=zabbix-agent state=started enabled=yes
