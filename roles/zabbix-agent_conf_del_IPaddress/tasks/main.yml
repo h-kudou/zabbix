@@ -9,7 +9,7 @@
     state=present
     backrefs=yes
     regexp=",{{ zabbix_server_replace_ip }}"
-    line==""
+    line=""
 
 - name: modify zabbix_agentd config Server ip(when writted for leading host)
   lineinfile: >
@@ -17,7 +17,7 @@
     state=present
     backrefs=yes
     regexp="Server={{ zabbix_server_replace_ip }},"
-    replace="Server="
+    line="Server="
   when: result_Server_ip.stdout.find("Server=zabbix_server_replace_ip")
 
 - name: register zabbix_agentd config ServerActive ip
@@ -31,7 +31,7 @@
     state=present
     backrefs=yes
     regexp=",{{ zabbix_server_replace_ip }}:10051"
-    replace=""
+    line=""
 
 - name: modify zabbix_agentd config ServerActive ip(when writted for leading host)
   lineinfile: >
@@ -39,7 +39,7 @@
     state=present
     backrefs=yes
     regexp="ServerActive={{ zabbix_server_replace_ip }}:10051,"
-    replace="ServerActive="
+    line="ServerActive="
   when: result_ServerActive_ip.stdout.find("ServerActive=zabbix_server_replace_ip:10051")
 
   notify:
