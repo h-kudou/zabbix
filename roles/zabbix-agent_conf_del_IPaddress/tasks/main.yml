@@ -4,42 +4,43 @@
   changed_when: false
 
 - name: modify zabbix_agentd config Server ip
-  replace:
-   dest=/etc/zabbix/zabbix_agentd.conf
-   regexp=",{{ zabbix_server_replace_ip }}"
-   replace=""
-  with_items:
-   -  zabbix_server_replace_ip
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=yes
+    regexp=",{{ zabbix_server_replace_ip }}"
+    line==""
 
 - name: modify zabbix_agentd config Server ip(when writted for leading host)
-  replace:
-   dest=/etc/zabbix/zabbix_agentd.conf
-   regexp="Server={{ zabbix_server_replace_ip }},"
-   replace="Server="
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=yes
+    regexp="Server={{ zabbix_server_replace_ip }},"
+    replace="Server="
   when: result_Server_ip.stdout.find("Server=zabbix_server_replace_ip")
-  with_items:
-   -  zabbix_server_replace_ip
-   
+
 - name: register zabbix_agentd config ServerActive ip
   shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^ServerActive='
   register: result_ServerActive_ip
   changed_when: false
 
 - name: modify zabbix_agentd config ServerActive ip
-  replace:
-   dest=/etc/zabbix/zabbix_agentd.conf
-   regexp=",{{ zabbix_server_replace_ip }}:10051"
-   replace=""
-  with_items:
-   -  zabbix_server_replace_ip
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=yes
+    regexp=",{{ zabbix_server_replace_ip }}:10051"
+    replace=""
 
 - name: modify zabbix_agentd config ServerActive ip(when writted for leading host)
-  replace:
-   dest=/etc/zabbix/zabbix_agentd.conf
-   regexp="Server={{ zabbix_server_replace_ip }}:10051,"
-   replace="Server="
+  lineinfile: >
+    dest=/etc/zabbix/zabbix_agentd.conf
+    state=present
+    backrefs=yes
+    regexp="ServerActive={{ zabbix_server_replace_ip }}:10051,"
+    replace="ServerActive="
   when: result_ServerActive_ip.stdout.find("ServerActive=zabbix_server_replace_ip:10051")
-  with_items:
-   -  zabbix_server_replace_ip
+
   notify:
     - restart zabbix-agent
