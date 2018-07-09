@@ -1,0 +1,10 @@
+- name: modify zabbix-agent-config(del_IPaddress)
+  hosts: all
+  sudo: yes
+  roles:
+    - name: common
+      tags:
+        - common
+    - name: zabbix-agent_conf_del_IPaddress
+      tags:
+        - zabbix-agent_conf_del_IPaddress
