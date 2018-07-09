@@ -7,20 +7,6 @@
 - name: rpmfile del
   file: path=/tmp/zabbix-agent-{{ zabbix_agent_version }}.x86_64.rpm  state=absent
 
-- name: Set RemoteCommands
-  lineinfile: >
-    dest=/etc/zabbix/zabbix_agentd.conf
-    state=present
-    insertafter='^# EnableRemoteCommands=0$'
-    line='EnableRemoteCommands=1'
-
-- name: Set LogRemoteCommands
-  lineinfile: >
-    dest=/etc/zabbix/zabbix_agentd.conf
-    state=present
-    insertafter='^# LogRemoteCommands=0$'
-    line='LogRemoteCommands=1'
-
 - name: Set Server ip
   lineinfile: >
     dest=/etc/zabbix/zabbix_agentd.conf
@@ -44,13 +30,6 @@
     backrefs=yes
     regexp='^Hostname=.*'
     line='Hostname={{ ansible_hostname }}'
-
-- name: Set MaxLinesPerSecond
-  lineinfile: >
-    dest=/etc/zabbix/zabbix_agentd.conf
-    state=present
-    insertafter='^# MaxLinesPerSecond=20$'
-    line='MaxLinesPerSecond=100'
 
 - name: start zabbix-agent and enable
   service: name=zabbix-agent state=started enabled=yes
