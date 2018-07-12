@@ -1,46 +1,49 @@
-- name: register zabbix_agentd config Server ip
-  shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^Server='
-  register: result_Server_ip
-  changed_when: false
-
-- name: modify zabbix_agentd config Server ip
-  lineinfile: >
-    dest=/etc/zabbix/zabbix_agentd.conf
-    state=present
-    backrefs=yes
-    regexp=",{{ zabbix_server_replace_ip }}"
-    line=""
-
-- name: modify zabbix_agentd config Server ip(when writted for leading host)
-  lineinfile: >
-    dest=/etc/zabbix/zabbix_agentd.conf
-    state=present
-    backrefs=yes
-    regexp="Server={{ zabbix_server_replace_ip }},"
-    line="Server="
-  when: result_Server_ip.stdout.find("Server=zabbix_server_replace_ip")
-
 - name: register zabbix_agentd config ServerActive ip
   shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^ServerActive='
   register: result_ServerActive_ip
+  always_run: yes
   changed_when: false
 
 - name: modify zabbix_agentd config ServerActive ip
-  lineinfile: >
+  replace:
     dest=/etc/zabbix/zabbix_agentd.conf
-    state=present
-    backrefs=yes
     regexp=",{{ zabbix_server_replace_ip }}:10051"
-    line=""
+    replace=""
+
+  notify:
+    - restart zabbix-agent
 
 - name: modify zabbix_agentd config ServerActive ip(when writted for leading host)
-  lineinfile: >
+  replace:
     dest=/etc/zabbix/zabbix_agentd.conf
-    state=present
-    backrefs=yes
     regexp="ServerActive={{ zabbix_server_replace_ip }}:10051,"
-    line="ServerActive="
+    replace="ServerActive="
   when: result_ServerActive_ip.stdout.find("ServerActive=zabbix_server_replace_ip:10051")
+
+  notify:
+    - restart zabbix-agent
+
+- name: register zabbix_agentd config Server ip
+  shell: cat /etc/zabbix/zabbix_agentd.conf | grep '^Server='
+  register: result_Server_ip
+  always_run: yes
+  changed_when: false
+
+- name: modify zabbix_agentd config Server ip
+  replace:
+    dest=/etc/zabbix/zabbix_agentd.conf
+    regexp=",{{ zabbix_server_replace_ip }}"
+    replace=""
+
+  notify:
+    - restart zabbix-agent
+
+- name: modify zabbix_agentd config Server ip(when writted for leading host)
+  replace:
+    dest=/etc/zabbix/zabbix_agentd.conf
+    regexp="Server={{ zabbix_server_replace_ip }},"
+    replace="Server="
+  when: result_Server_ip.stdout.find("Server=zabbix_server_replace_ip")
 
   notify:
     - restart zabbix-agent
