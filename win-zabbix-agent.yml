@@ -1,6 +1,6 @@
 - name: Install win-zabbix-agent
   hosts: windows
-  sudo: yes
+  remote_user: Administrator
   roles:
     - name: common
       tags:
