@@ -9,6 +9,13 @@
 - name: Install zabbix-agent
   win_command: CMD /C "C:\Program Files\zabbix\{{ win-zabbix_agent_version }}.exe --install"
 
+- name: Set LogFile
+  lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# LogFile=$'
+    line='LogFile=C:\Program Files\zabbix\zabbix_agentd.log'
+
 - name: Set RemoteCommands
   lineinfile: >
     dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
