@@ -72,4 +72,4 @@
   win_command: CMD /C "C:\Program Files\zabbix\zabbix_agentd.exe --config C:\Program Files\zabbix\zabbix_agentd.win.conf --install"
 
 - name: start zabbix-agent and enable
-  win_command: CMD /C "C:\Program Files\zabbix\zabbix_agentd.exe --config C:\Program Files\zabbix\zabbix_agentd.win.conf --start"
+
