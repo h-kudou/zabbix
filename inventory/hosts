@@ -9,3 +9,11 @@
 
 [windows]
 192.168.100.106
+
+[windows:vars]
+ 
+ansible_ssh_user=Administrator
+ 
+ansible_ssh_pass=ここにWindowsユーザのパスワード
+ 
+ansible_connection=winrm
