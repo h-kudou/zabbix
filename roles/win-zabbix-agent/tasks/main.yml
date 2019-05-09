@@ -7,7 +7,7 @@
   copy:  src=/work/{{ win-zabbix_agent_version }}.exe  dest='C:\Program Files\zabbix'
 
 - name: Install zabbix-agent
-  win_command: CMD /C "C:\Program Files\zabbix\{{ win-zabbix_agent_version }}.exe /s /v"/qn REBOOT=ReallySuppress"
+  win_command: CMD /C "C:\Program Files\zabbix\{{ win-zabbix_agent_version }}.exe /s /v"/qn INSTALLDIR=C:\Program Files\zabbix"
 
 - name: Set LogFile
   win_lineinfile: >
@@ -15,6 +15,13 @@
     state=present
     insertafter='^# LogFile=$'
     line='LogFile=C:\Program Files\zabbix\zabbix_agentd.log'
+
+- name: Set LogFileSize
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# LogFileSize=1$'
+    line='LogFileSize=10'
 
 - name: Set RemoteCommands
   win_lineinfile: >
@@ -68,8 +75,11 @@
     insertafter='^# MaxLinesPerSecond=20$'
     line='MaxLinesPerSecond=100'
 
-- name: Install zabbix-agent
+- name: registration zabbix-agent
   win_command: CMD /C "C:\Program Files\zabbix\zabbix_agentd.exe --config C:\Program Files\zabbix\zabbix_agentd.win.conf --install"
 
-- name: start zabbix-agent and enable
+- name: registration zabbix-agent
+  win_command: CMD /C "sc config "Zabbix Agent" start= delayed-auto"
 
+- name: start zabbix-agent and enable
+  win_command: CMD /C "C:\Program Files\zabbix\zabbix_agentd.exe --config C:\Program Files\zabbix\zabbix_agentd.win.conf --start"
