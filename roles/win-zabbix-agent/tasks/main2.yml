@@ -1,0 +1,85 @@
+- name: Create zabbix directory
+  win_file:
+    path: 'C:\Program Files\zabbix'
+    state: directory
+
+- name: exefile cp
+  copy:  src=/work/{{ win-zabbix_agent_version }}.exe  dest='C:\Program Files\zabbix'
+
+- name: Install zabbix-agent
+  win_command: CMD /C "C:\Program Files\zabbix\{{ win-zabbix_agent_version }}.exe /s /v"/qn INSTALLDIR=C:\Program Files\zabbix"
+
+- name: Set LogFile
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# LogFile=$'
+    line='LogFile=C:\Program Files\zabbix\zabbix_agentd.log'
+
+- name: Set LogFileSize
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# LogFileSize=1$'
+    line='LogFileSize=10'
+
+- name: Set RemoteCommands
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# EnableRemoteCommands=0$'
+    line='EnableRemoteCommands=1'
+
+- name: Set LogRemoteCommands
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# LogRemoteCommands=0$'
+    line='LogRemoteCommands=1'
+
+- name: Set Server ip
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    backrefs=yes
+    regexp='^Server=.*[0-9]$'
+    line='Server={{ zabbix_server_ip }}'
+
+- name: Set ServerActive ip
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    backrefs=no
+    regexp='^ServerActive=.*[0-9]$'
+    line='ServerActive={{ zabbix_server_ip }}:10051'
+
+- name: Set Hostname
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    backrefs=yes
+    regexp='^Hostname=.*'
+    line='Hostname={{ ansible_hostname }}'
+
+- name: Set RefreshActiveChecks
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# RefreshActiveChecks=120$'
+    line='RefreshActiveChecks=60'
+
+- name: Set MaxLinesPerSecond
+  win_lineinfile: >
+    dest=C:\Program Files\zabbix\zabbix_agentd.win.conf
+    state=present
+    insertafter='^# MaxLinesPerSecond=20$'
+    line='MaxLinesPerSecond=100'
+
+- name: registration zabbix-agent
+  win_command: CMD /C "C:\Program Files\zabbix\zabbix_agentd.exe" -i -c "C:\Program Files\zabbix\zabbix_agentd.win.conf"
+
+- name: start zabbix-agent and enable
+  win_service:
+    name: Zabbix Agent
+    start_mode: delayed
+    state: started
